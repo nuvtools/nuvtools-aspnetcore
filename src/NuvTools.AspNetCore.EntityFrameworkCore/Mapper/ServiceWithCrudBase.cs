@@ -3,11 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NuvTools.AspNetCore.Mapper;
 using NuvTools.Common.ResultWrapper;
 using NuvTools.Data.EntityFrameworkCore.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace NuvTools.AspNetCore.EntityFrameworkCore.Mapper;
 

@@ -16,6 +16,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuvTools.AspNetCore", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuvTools.AspNetCore.EntityFrameworkCore", "src\NuvTools.AspNetCore.EntityFrameworkCore\NuvTools.AspNetCore.EntityFrameworkCore.csproj", "{A4C3BE0D-A233-4026-9AE9-8B1395418E1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuvTools.AspNetCore.Tests", "tests\NuvTools.AspNetCore.Tests\NuvTools.AspNetCore.Tests.csproj", "{9E6FB56C-1DE4-4FFE-AA40-88ED4FB6BF18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{A4C3BE0D-A233-4026-9AE9-8B1395418E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4C3BE0D-A233-4026-9AE9-8B1395418E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4C3BE0D-A233-4026-9AE9-8B1395418E1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E6FB56C-1DE4-4FFE-AA40-88ED4FB6BF18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E6FB56C-1DE4-4FFE-AA40-88ED4FB6BF18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E6FB56C-1DE4-4FFE-AA40-88ED4FB6BF18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E6FB56C-1DE4-4FFE-AA40-88ED4FB6BF18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,6 +43,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{77571ABE-3EF7-403F-ACCC-68B539B02AB6} = {0553FC7C-D8CC-444A-970D-CB3B064020F5}
 		{A4C3BE0D-A233-4026-9AE9-8B1395418E1A} = {0553FC7C-D8CC-444A-970D-CB3B064020F5}
+		{9E6FB56C-1DE4-4FFE-AA40-88ED4FB6BF18} = {3BD96AEC-23A5-44DF-ABBE-82E683AB587E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF8E6A9B-D224-46ED-9C99-E6DD796B4CC9}

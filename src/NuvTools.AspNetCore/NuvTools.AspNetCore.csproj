@@ -9,7 +9,7 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>NuvTools.AspNetCore.snk</AssemblyOriginatorKeyFile>
 		<Description>Common library with helpers to use with ASP.NET Aplications.</Description>
-		<Version>7.0.1</Version>
+		<Version>7.1.0</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<PackageIcon>icon.png</PackageIcon>
@@ -42,7 +42,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 	</ItemGroup>
 
