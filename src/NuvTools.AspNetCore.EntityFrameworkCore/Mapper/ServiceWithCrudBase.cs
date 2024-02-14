@@ -7,9 +7,9 @@ using System.Linq.Expressions;
 
 namespace NuvTools.AspNetCore.EntityFrameworkCore.Mapper;
 
-public abstract class ServiceWithCrudBase<TContext, TForm, TData, TKey> : ServiceWithMapperBase<TForm, TData>
-                                                                where TForm : class
-                                                                where TData : class
+public abstract class ServiceWithCrudBase<TContext, TDTO, TEntity, TKey> : ServiceWithMapperBase<TDTO, TEntity>
+                                                                where TDTO : class
+                                                                where TEntity : class
                                                                 where TContext : DbContext
 {
     protected readonly TContext Context;
@@ -19,35 +19,35 @@ public abstract class ServiceWithCrudBase<TContext, TForm, TData, TKey> : Servic
         Context = context;
     }
 
-    public DbSet<TData> Dataset { get { return Context.Set<TData>(); } }
+    public DbSet<TEntity> Dataset { get { return Context.Set<TEntity>(); } }
 
-    public async Task<TForm> FindAsync(TKey id)
+    public async Task<TDTO> FindAsync(TKey id)
     {
-        return ConvertToForm(await Context.FindAsync<TData>(id));
+        return ConvertToDTO(await Context.FindAsync<TEntity>(id));
     }
 
-    public async Task<TForm> FindAsync(object[] keys)
+    public async Task<TDTO> FindAsync(object[] keys)
     {
-        return ConvertToForm(await Context.FindAsync<TData>(keys));
+        return ConvertToDTO(await Context.FindAsync<TEntity>(keys));
     }
 
-    public async Task<IEnumerable<TForm>> FindFromExpressionAsync(Expression<Func<IQueryable<TData>>> expression)
+    public async Task<IEnumerable<TDTO>> FindFromExpressionAsync(Expression<Func<IQueryable<TEntity>>> expression)
     {
-        return ConvertToForm(await Context.FromExpression(expression).ToListAsync());
+        return ConvertToDTO(await Context.FromExpression(expression).ToListAsync());
     }
 
-    public virtual async Task<IResult<TKey>> AddAndSaveAsync(TForm model)
+    public virtual async Task<IResult<TKey>> AddAndSaveAsync(TDTO model)
     {
-        return await Context.AddAndSaveAsync<TData, TKey>(ConvertToData(model));
+        return await Context.AddAndSaveAsync<TEntity, TKey>(ConvertToEntity(model));
     }
 
-    public virtual async Task<IResult> UpdateAndSaveAsync(TKey id, TForm model)
+    public virtual async Task<IResult> UpdateAndSaveAsync(TKey id, TDTO model)
     {
-        return await Context.UpdateAndSaveAsync(ConvertToData(model), id);
+        return await Context.UpdateAndSaveAsync(ConvertToEntity(model), id);
     }
 
     public virtual async Task<IResult> RemoveAndSaveAsync(TKey id)
     {
-        return await Context.RemoveAndSaveAsync<TData>(id);
+        return await Context.RemoveAndSaveAsync<TEntity>(id);
     }
 }

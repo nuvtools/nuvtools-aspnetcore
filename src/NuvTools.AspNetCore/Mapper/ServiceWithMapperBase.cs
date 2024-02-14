@@ -2,8 +2,8 @@
 
 namespace NuvTools.AspNetCore.Mapper;
 
-public abstract class ServiceWithMapperBase<TForm, TData> where TForm : class
-                                                    where TData : class
+public abstract class ServiceWithMapperBase<TDTO, TEntity> where TDTO : class
+                                                    where TEntity : class
 {
     private readonly IMapper _mapper;
 
@@ -22,39 +22,39 @@ public abstract class ServiceWithMapperBase<TForm, TData> where TForm : class
 
     #region Converter
 
-    protected TReturn ConvertTo<TReturn>(TData model)
+    protected TReturn ConvertTo<TReturn>(TEntity model)
     {
         return _mapper.Map<TReturn>(model);
     }
 
-    protected IEnumerable<TReturn> ConvertTo<TReturn>(IEnumerable<TData> models)
+    protected IEnumerable<TReturn> ConvertTo<TReturn>(IEnumerable<TEntity> models)
     {
         return _mapper.Map<IEnumerable<TReturn>>(models);
     }
 
-    protected TData ConvertToData(TForm model)
+    protected TEntity ConvertToEntity(TDTO model)
     {
-        return _mapper.Map<TData>(model);
+        return _mapper.Map<TEntity>(model);
     }
 
-    protected TForm ConvertToForm(TData model)
+    protected TDTO ConvertToDTO(TEntity model)
     {
-        return _mapper.Map<TForm>(model);
+        return _mapper.Map<TDTO>(model);
     }
 
-    protected IEnumerable<TForm> ConvertToForm(IEnumerable<TData> models)
-    {
-        return _mapper.Map<IEnumerable<TForm>>(models);
+    protected IEnumerable<TDTO> ConvertToDTO(IEnumerable<TEntity> models)
+    {   
+        return _mapper.Map<IEnumerable<TDTO>>(models);
     }
 
-    protected IList<TForm> ConvertToForm(IList<TData> models)
+    protected IList<TDTO> ConvertToDTO(IList<TEntity> models)
     {
-        return _mapper.Map<IList<TForm>>(models);
+        return _mapper.Map<IList<TDTO>>(models);
     }
 
-    protected TForm[] ConvertToForm(TData[] models)
+    protected TDTO[] ConvertToDTO(TEntity[] models)
     {
-        return _mapper.Map<TForm[]>(models);
+        return _mapper.Map<TDTO[]>(models);
     }
 
     #endregion

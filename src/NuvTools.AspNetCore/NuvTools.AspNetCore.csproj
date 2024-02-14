@@ -9,7 +9,7 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>NuvTools.AspNetCore.snk</AssemblyOriginatorKeyFile>
 		<Description>Common library with helpers to use with ASP.NET Aplications.</Description>
-		<Version>8.0.0</Version>
+		<Version>8.0.2</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<PackageIcon>icon.png</PackageIcon>

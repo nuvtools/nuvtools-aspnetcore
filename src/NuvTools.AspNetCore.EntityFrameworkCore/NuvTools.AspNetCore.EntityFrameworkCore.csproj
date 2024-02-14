@@ -9,7 +9,7 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>NuvTools.AspNetCore.EntityFrameworkCore.snk</AssemblyOriginatorKeyFile>
 		<Description>EntityFramework Core helper library to use with ASP.NET Aplications.</Description>
-		<Version>8.0.0</Version>
+		<Version>8.0.2</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<PackageIcon>icon.png</PackageIcon>
@@ -27,7 +27,7 @@
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 		
-		<PackageReference Include="NuvTools.Data.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="NuvTools.Data.EntityFrameworkCore" Version="8.0.2" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(targetframework)' == 'net6'">
