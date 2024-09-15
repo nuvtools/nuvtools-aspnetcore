@@ -2,59 +2,58 @@
 
 namespace NuvTools.AspNetCore.Mapper;
 
-public abstract class ServiceWithMapperBase<TDTO, TEntity> where TDTO : class
+public abstract class ServiceWithMapperBase<TDTO, TEntity>(IMapper mapper) where TDTO : class
                                                     where TEntity : class
 {
-    private readonly IMapper _mapper;
-
     protected IMapper Mapper
     {
         get
         {
-            return _mapper;
+            return mapper;
         }
-    }
-
-    public ServiceWithMapperBase(IMapper mapper)
-    {
-        _mapper = mapper;
     }
 
     #region Converter
 
-    protected TReturn ConvertTo<TReturn>(TEntity model)
+    protected TReturn? ConvertTo<TReturn>(TEntity? model)
     {
-        return _mapper.Map<TReturn>(model);
+        if (model is null) return default;
+        return mapper.Map<TReturn>(model);
     }
 
-    protected IEnumerable<TReturn> ConvertTo<TReturn>(IEnumerable<TEntity> models)
+    protected IEnumerable<TReturn>? ConvertTo<TReturn>(IEnumerable<TEntity>? models)
     {
-        return _mapper.Map<IEnumerable<TReturn>>(models);
+        if (models is null) return null;
+        return mapper.Map<IEnumerable<TReturn>>(models);
     }
 
     protected TEntity ConvertToEntity(TDTO model)
     {
-        return _mapper.Map<TEntity>(model);
+        return mapper.Map<TEntity>(model);
     }
 
-    protected TDTO ConvertToDTO(TEntity model)
+    protected TDTO? ConvertToDTO(TEntity? model)
     {
-        return _mapper.Map<TDTO>(model);
+        if (model is null) return null;
+        return mapper.Map<TDTO>(model);
     }
 
-    protected IEnumerable<TDTO> ConvertToDTO(IEnumerable<TEntity> models)
-    {   
-        return _mapper.Map<IEnumerable<TDTO>>(models);
-    }
-
-    protected IList<TDTO> ConvertToDTO(IList<TEntity> models)
+    protected IEnumerable<TDTO>? ConvertToDTO(IEnumerable<TEntity>? models)
     {
-        return _mapper.Map<IList<TDTO>>(models);
+        if (models is null) return null;
+        return mapper.Map<IEnumerable<TDTO>>(models);
     }
 
-    protected TDTO[] ConvertToDTO(TEntity[] models)
+    protected IList<TDTO>? ConvertToDTO(IList<TEntity>? models)
     {
-        return _mapper.Map<TDTO[]>(models);
+        if (models is null) return null;
+        return mapper.Map<IList<TDTO>>(models);
+    }
+
+    protected TDTO[]? ConvertToDTO(TEntity[]? models)
+    {
+        if (models is null) return null;
+        return mapper.Map<TDTO[]>(models);
     }
 
     #endregion
