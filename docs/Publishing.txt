@@ -1,2 +1,2 @@
-nuget.exe push -Source "nuvtools" -ApiKey az NuvTools.AspNetCore.8.1.0.nupkg
-nuget.exe push -Source "nuvtools" -ApiKey az NuvTools.AspNetCore.EntityFrameworkCore.8.1.0.nupkg
+nuget.exe push -Source "nuvtools" -ApiKey az NuvTools.AspNetCore.9.0.0.nupkg
+nuget.exe push -Source "nuvtools" -ApiKey az NuvTools.AspNetCore.EntityFrameworkCore.9.0.0.nupkg
