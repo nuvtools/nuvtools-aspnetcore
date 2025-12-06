@@ -6,8 +6,6 @@
 		<Authors>Nuv Tools</Authors>
 		<Copyright>Copyright © 2025 Nuv Tools</Copyright>
 		<PackageProjectUrl>https://nuvtools.com</PackageProjectUrl>
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>NuvTools.AspNetCore.snk</AssemblyOriginatorKeyFile>
 		<Description>Common library with helpers to use with ASP.NET Aplications.</Description>
 		<Version>10.0.0</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
