@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src\NuvTools.AspNetCore\NuvTools.AspNetCore.csproj" />
+    <Project Path="src\NuvTools.AspNetCore.EntityFrameworkCore\NuvTools.AspNetCore.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\NuvTools.AspNetCore.Tests\NuvTools.AspNetCore.Tests.csproj" />
+  </Folder>
+</Solution>

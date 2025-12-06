@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8;net9</TargetFrameworks>
+		<TargetFrameworks>net8;net9;net10.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>Nuv Tools</Authors>
 		<Copyright>Copyright © 2025 Nuv Tools</Copyright>
@@ -9,7 +9,7 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>NuvTools.AspNetCore.snk</AssemblyOriginatorKeyFile>
 		<Description>Common library with helpers to use with ASP.NET Aplications.</Description>
-		<Version>9.5.0</Version>
+		<Version>10.0.0</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<PackageIcon>icon.png</PackageIcon>
@@ -43,11 +43,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="15.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.10" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10" />
-		<PackageReference Include="Microsoft.JSInterop" Version="8.0.21" Condition="'$(TargetFramework)' == 'net8'" />
-		<PackageReference Include="Microsoft.JSInterop" Version="9.0.10" Condition="'$(TargetFramework)' == 'net9'" />
+		<PackageReference Include="AutoMapper" Version="16.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+		<PackageReference Include="Microsoft.JSInterop" Version="8.0.22" Condition="'$(TargetFramework)' == 'net8'" />
+		<PackageReference Include="Microsoft.JSInterop" Version="9.0.11" Condition="'$(TargetFramework)' == 'net9'" />
+		<PackageReference Include="Microsoft.JSInterop" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />
 	</ItemGroup>
 	
 </Project>
