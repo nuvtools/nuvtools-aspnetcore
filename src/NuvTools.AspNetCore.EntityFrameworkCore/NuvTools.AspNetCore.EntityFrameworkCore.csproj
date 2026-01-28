@@ -7,7 +7,7 @@
 		<Copyright>Copyright © 2026 Nuv Tools</Copyright>
 		<PackageProjectUrl>https://nuvtools.com</PackageProjectUrl>
 		<Description>Entity Framework Core service base classes with CRUD operations and database migration helpers for ASP.NET Core.</Description>
-		<Version>10.1.0</Version>
+		<Version>10.1.1</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<PackageIcon>icon.png</PackageIcon>
@@ -25,7 +25,7 @@
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 		
-		<PackageReference Include="NuvTools.Data.EntityFrameworkCore" Version="[10.0.2,10.1.0)" />
+		<PackageReference Include="NuvTools.Data.EntityFrameworkCore" Version="[10.1.0,10.2.0)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[9.0.12,9.1.0)" Condition="'$(TargetFramework)' == 'net8' OR '$(TargetFramework)' == 'net9'" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[10.0.2,10.1.0)" Condition="'$(TargetFramework)' == 'net10.0'" />
 	</ItemGroup>
