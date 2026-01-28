@@ -1,4 +1,4 @@
-namespace NuvTools.AspNetCore.Blazor.MudBlazor.Services;
+namespace NuvTools.AspNetCore.Blazor.Services;
 
 /// <summary>
 /// Default implementation of <see cref="ILoadingService"/> for managing loading indicator state.

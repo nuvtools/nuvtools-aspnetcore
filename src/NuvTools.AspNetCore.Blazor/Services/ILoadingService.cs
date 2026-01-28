@@ -1,4 +1,4 @@
-namespace NuvTools.AspNetCore.Blazor.MudBlazor.Services;
+namespace NuvTools.AspNetCore.Blazor.Services;
 
 /// <summary>
 /// Provides a service for managing loading indicator state.
@@ -12,9 +12,9 @@ namespace NuvTools.AspNetCore.Blazor.MudBlazor.Services;
 /// <code>
 /// @inject ILoadingService LoadingService
 ///
-/// &lt;MudOverlay Visible="LoadingService.IsLoading" DarkBackground="true"&gt;
-///     &lt;MudProgressCircular Color="Color.Primary" Indeterminate="true" /&gt;
-/// &lt;/MudOverlay&gt;
+/// &lt;div class="loading-overlay" style="display: @(LoadingService.IsLoading ? "block" : "none")"&gt;
+///     Loading...
+/// &lt;/div&gt;
 ///
 /// @code {
 ///     protected override void OnInitialized()

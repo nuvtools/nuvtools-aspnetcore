@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using NuvTools.AspNetCore.Blazor.JSInterop;
-using NuvTools.AspNetCore.Blazor.MudBlazor.Services;
+using NuvTools.AspNetCore.Blazor.Services;
 using NuvTools.Common.ResultWrapper;
 using NuvTools.Data.Paging;
 

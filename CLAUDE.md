@@ -66,20 +66,18 @@ Key pattern: The CompositeLocalizer allows you to combine multiple IStringLocali
 
 ### NuvTools.AspNetCore.Blazor Library
 
-Provides JavaScript interop services for Blazor applications:
+Provides JavaScript interop and common services for Blazor applications:
 
 - **IClipboardService / ClipboardService**: Clipboard read/write operations
 - **ILocalStorageService / LocalStorageService**: Browser localStorage access with JSON serialization
 - **ISessionStorageService / SessionStorageService**: Browser sessionStorage access with JSON serialization
+- **ILoadingService / LoadingService**: Counter-based loading indicator with nested call support. Use `RunAsync()` for exception-safe loading.
 
 Register services using `AddBlazorServices()` extension method.
 
 ### NuvTools.AspNetCore.Blazor.MudBlazor Library
 
 MudBlazor-specific components and utilities:
-
-#### Services
-- **ILoadingService / LoadingService**: Counter-based loading indicator with nested call support. Use `RunAsync()` for exception-safe loading.
 
 #### Components
 - **MudTablePageBase<TItem, TFilter, TOrdering>**: Abstract base class for server-side paged MudTable with session storage filter persistence. Override `OnFetchDataFailed()` to customize error handling.

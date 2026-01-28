@@ -24,19 +24,19 @@ Entity Framework Core helpers for ASP.NET Core.
 
 ### NuvTools.AspNetCore.Blazor
 
-Blazor JavaScript interop services for browser APIs.
+Blazor services for browser APIs and common functionality.
 
 **Key Features:**
 - **Clipboard Service**: Read/write clipboard operations
 - **Local Storage Service**: Browser localStorage with JSON serialization
 - **Session Storage Service**: Browser sessionStorage with JSON serialization
+- **Loading Service**: Counter-based loading indicator with nested call support and `RunAsync` helper
 
 ### NuvTools.AspNetCore.Blazor.MudBlazor
 
 MudBlazor components and utilities for Blazor applications.
 
 **Key Features:**
-- **Loading Service**: Counter-based loading indicator with nested call support and `RunAsync` helper
 - **Pattern Converters**: Flexible input masking for MudTextField (phone, documents, etc.)
 - **Country-Specific Converters**: Pre-configured formatters for Brazil and United States
 - **MudTable Base Class**: Server-side paging with session storage persistence
@@ -125,13 +125,13 @@ app.DatabaseMigrate<MyDbContext>(TimeSpan.FromMinutes(5));
 app.Run();
 ```
 
-### Loading Service (MudBlazor)
+### Loading Service (Blazor)
 
 Manage loading indicators with nested call support:
 
 ```csharp
-// Register in Program.cs
-services.AddScoped<ILoadingService, LoadingService>();
+// Register in Program.cs (or use services.AddBlazorServices() to register all)
+services.AddLoadingService();
 
 // In your component
 @inject ILoadingService LoadingService

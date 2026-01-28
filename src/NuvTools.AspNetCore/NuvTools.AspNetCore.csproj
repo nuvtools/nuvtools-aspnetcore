@@ -6,7 +6,7 @@
 		<Authors>Nuv Tools</Authors>
 		<Copyright>Copyright © 2026 Nuv Tools</Copyright>
 		<PackageProjectUrl>https://nuvtools.com</PackageProjectUrl>
-		<Description>ASP.NET Core helpers including AutoMapper integration, composite localization, and JavaScript interop services.</Description>
+		<Description>ASP.NET Core helpers including composite localization.</Description>
 		<Version>10.1.0</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
@@ -17,7 +17,7 @@
 		<RepositoryType>git</RepositoryType>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageTags>NuvTools AspNetCore AutoMapper Localization JSInterop</PackageTags>
+		<PackageTags>NuvTools AspNetCore Localization</PackageTags>
 		<ImplicitUsings>true</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
@@ -42,9 +42,6 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[10.0.2,10.1.0)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[10.0.2,10.1.0)" />
-		<PackageReference Include="Microsoft.JSInterop" Version="[8.0.23,8.1.0)" Condition="'$(TargetFramework)' == 'net8'" />
-		<PackageReference Include="Microsoft.JSInterop" Version="[9.0.12,9.1.0)" Condition="'$(TargetFramework)' == 'net9'" />
-		<PackageReference Include="Microsoft.JSInterop" Version="[10.0.2,10.1.0)" Condition="'$(TargetFramework)' == 'net10.0'" />
 	</ItemGroup>
 	
 </Project>

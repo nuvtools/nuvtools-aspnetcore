@@ -6,7 +6,7 @@
 		<Authors>Nuv Tools</Authors>
 		<Copyright>Copyright © 2026 Nuv Tools</Copyright>
 		<PackageProjectUrl>https://nuvtools.com</PackageProjectUrl>
-		<Description>MudBlazor helpers including converters, validators, loading service, and server-paged table base component.</Description>
+		<Description>MudBlazor helpers including converters, validators, and server-paged table base component.</Description>
 		<Version>10.1.0</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
@@ -17,7 +17,7 @@
 		<RepositoryType>git</RepositoryType>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageTags>NuvTools Blazor MudBlazor Converters ServerPaging Loading</PackageTags>
+		<PackageTags>NuvTools Blazor MudBlazor Converters ServerPaging</PackageTags>
 		<ImplicitUsings>true</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
