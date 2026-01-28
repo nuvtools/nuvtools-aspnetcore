@@ -1,6 +1,11 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src\NuvTools.AspNetCore\NuvTools.AspNetCore.csproj" />
+    <Project Path="src\NuvTools.AspNetCore.Blazor\NuvTools.AspNetCore.Blazor.csproj" />
+    <Project Path="src\NuvTools.AspNetCore.Blazor.MudBlazor\NuvTools.AspNetCore.Blazor.MudBlazor.csproj" />
     <Project Path="src\NuvTools.AspNetCore.EntityFrameworkCore\NuvTools.AspNetCore.EntityFrameworkCore.csproj" />
   </Folder>
   <Folder Name="/tests/">

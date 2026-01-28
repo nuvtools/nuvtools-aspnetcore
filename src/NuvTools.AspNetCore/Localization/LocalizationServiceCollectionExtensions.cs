@@ -7,7 +7,7 @@ namespace NuvTools.AspNetCore.Localization;
 /// <summary>
 /// Provides extension methods for configuring composite localization services.
 /// </summary>
-public static class LocalizationServiceExtensions
+public static class LocalizationServiceCollectionExtensions
 {
     /// <summary>
     /// Adds the composite localizer to the service collection, enabling multiple localization sources

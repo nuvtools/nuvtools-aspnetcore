@@ -9,23 +9,37 @@ A suite of helper libraries designed to simplify and enhance ASP.NET Core applic
 
 ### NuvTools.AspNetCore
 
-A general-purpose library providing common helpers for ASP.NET Core applications.
+ASP.NET Core helpers including composite localization.
 
 **Key Features:**
 - **Composite Localization**: Multi-source localization with prefix-based routing and fallback resolution
-- **AutoMapper Integration**: Base classes for services with built-in DTO/Entity mapping
-- **JavaScript Interop**: Clipboard operations for Blazor applications
 - Fully documented with XML comments for IntelliSense support
 
 ### NuvTools.AspNetCore.EntityFrameworkCore
 
-A specialized library offering Entity Framework Core helpers for ASP.NET Core projects.
+Entity Framework Core helpers for ASP.NET Core.
 
 **Key Features:**
-- **CRUD Base Classes**: Pre-built service base classes with complete CRUD operations
 - **Database Migration Extensions**: Automatic migration application with configurable timeouts
-- **AutoMapper + EF Integration**: Seamless DTO/Entity conversion with database operations
-- Built on top of `NuvTools.AspNetCore` for maximum code reuse
+
+### NuvTools.AspNetCore.Blazor
+
+Blazor JavaScript interop services for browser APIs.
+
+**Key Features:**
+- **Clipboard Service**: Read/write clipboard operations
+- **Local Storage Service**: Browser localStorage with JSON serialization
+- **Session Storage Service**: Browser sessionStorage with JSON serialization
+
+### NuvTools.AspNetCore.Blazor.MudBlazor
+
+MudBlazor components and utilities for Blazor applications.
+
+**Key Features:**
+- **Loading Service**: Counter-based loading indicator with nested call support and `RunAsync` helper
+- **Pattern Converters**: Flexible input masking for MudTextField (phone, documents, etc.)
+- **Country-Specific Converters**: Pre-configured formatters for Brazil and United States
+- **MudTable Base Class**: Server-side paging with session storage persistence
 
 ## Installation
 
@@ -37,6 +51,12 @@ dotnet add package NuvTools.AspNetCore
 
 # For Entity Framework Core helpers (includes NuvTools.AspNetCore)
 dotnet add package NuvTools.AspNetCore.EntityFrameworkCore
+
+# For Blazor JavaScript interop services
+dotnet add package NuvTools.AspNetCore.Blazor
+
+# For MudBlazor components and utilities
+dotnet add package NuvTools.AspNetCore.Blazor.MudBlazor
 ```
 
 Or via Package Manager Console:
@@ -44,6 +64,8 @@ Or via Package Manager Console:
 ```powershell
 Install-Package NuvTools.AspNetCore
 Install-Package NuvTools.AspNetCore.EntityFrameworkCore
+Install-Package NuvTools.AspNetCore.Blazor
+Install-Package NuvTools.AspNetCore.Blazor.MudBlazor
 ```
 
 ## Quick Start
@@ -86,47 +108,6 @@ public class MyService
 }
 ```
 
-### AutoMapper Service Base
-
-Create services with built-in mapping:
-
-```csharp
-public class ProductService : ServiceWithMapperBase<ProductDto, Product>
-{
-    public ProductService(IMapper mapper) : base(mapper) { }
-
-    public ProductDto Convert(Product product)
-    {
-        return ConvertToDTO(product);
-    }
-
-    public IEnumerable<ProductDto> ConvertAll(IEnumerable<Product> products)
-    {
-        return ConvertToDTO(products);
-    }
-}
-```
-
-### CRUD Service Base
-
-Create full CRUD services with minimal code:
-
-```csharp
-public class CustomerService : ServiceWithCrudBase<MyDbContext, CustomerDto, Customer, int>
-{
-    public CustomerService(MyDbContext context, IMapper mapper)
-        : base(context, mapper) { }
-
-    // FindAsync, AddAndSaveAsync, UpdateAndSaveAsync, RemoveAndSaveAsync
-    // are already implemented!
-
-    public async Task<CustomerDto?> GetCustomerById(int id)
-    {
-        return await FindAsync(id);
-    }
-}
-```
-
 ### Database Migrations
 
 Apply migrations automatically on startup:
@@ -142,6 +123,95 @@ app.DatabaseMigrate<MyDbContext>();
 app.DatabaseMigrate<MyDbContext>(TimeSpan.FromMinutes(5));
 
 app.Run();
+```
+
+### Loading Service (MudBlazor)
+
+Manage loading indicators with nested call support:
+
+```csharp
+// Register in Program.cs
+services.AddScoped<ILoadingService, LoadingService>();
+
+// In your component
+@inject ILoadingService LoadingService
+@implements IDisposable
+
+<MudOverlay Visible="LoadingService.IsLoading" DarkBackground="true">
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+</MudOverlay>
+
+@code {
+    protected override void OnInitialized()
+    {
+        LoadingService.OnChange += StateHasChanged;
+    }
+
+    private async Task LoadData()
+    {
+        // Option 1: Manual Show/Hide (supports nesting)
+        LoadingService.Show();
+        try { await FetchData(); }
+        finally { LoadingService.Hide(); }
+
+        // Option 2: RunAsync helper (recommended)
+        await LoadingService.RunAsync(async () => await FetchData());
+    }
+
+    public void Dispose() => LoadingService.OnChange -= StateHasChanged;
+}
+```
+
+### Pattern Converters (MudBlazor)
+
+Apply input masks to MudTextField components:
+
+```csharp
+@using NuvTools.AspNetCore.Blazor.MudBlazor.Converters
+
+// Custom pattern: A=alphanumeric, N=numeric, L=letter
+<MudTextField @bind-Value="LicensePlate"
+              Converter="@(new PatternStringConverter("LLL-NANN"))" />
+```
+
+### Country-Specific Converters
+
+**United States:**
+
+```csharp
+@using NuvTools.AspNetCore.Blazor.MudBlazor.UnitedStates.Converters
+
+<MudTextField @bind-Value="Phone" Label="Phone"
+              Converter="USDocumentConverters.Phone" />
+// Output: (555) 123-4567
+
+<MudTextField @bind-Value="Ssn" Label="SSN"
+              Converter="USDocumentConverters.Ssn" />
+// Output: 123-45-6789
+
+<MudTextField @bind-Value="ZipCode" Label="ZIP Code"
+              Converter="USDocumentConverters.ZipCode" />
+// Output: 90210
+
+// Format directly in code
+var formatted = USDocumentConverters.FormatPhone("5551234567");
+```
+
+**Brazil:**
+
+```csharp
+@using NuvTools.AspNetCore.Blazor.MudBlazor.Brazil.Converters
+
+<MudTextField @bind-Value="MobilePhone" Label="Mobile"
+              Converter="BrazilianDocumentConverters.MobilePhone" />
+// Output: (11) 99999-9999
+
+<MudTextField @bind-Value="Cpf" Label="CPF"
+              Converter="BrazilianDocumentConverters.Cpf" />
+// Output: 123.456.789-00
+
+// Auto-detect mobile vs landline
+var formatted = BrazilianDocumentConverters.FormatPhone("11999999999");
 ```
 
 ### Clipboard Service (Blazor)
@@ -171,7 +241,6 @@ Use JavaScript interop for clipboard operations:
 ## Features
 
 - **Multi-targeting**: Compatible with .NET 8, .NET 9, and .NET 10
-- **Strong-named assemblies**: Signed for use in fully trusted environments
 - **Comprehensive documentation**: Full XML documentation for IntelliSense
 - **Modular design**: Use only what you need
 - **Best practices**: Promotes clean architecture patterns
@@ -200,7 +269,7 @@ dotnet build NuvTools.AspNetCore.slnx --configuration Release
 
 - .NET 8.0 SDK or higher
 - Visual Studio 2022 (v17.11+) or Visual Studio Code with C# extension
-- AutoMapper 16.0.0+
+- MudBlazor 8.0.0+ (for NuvTools.AspNetCore.Blazor.MudBlazor)
 
 ## Contributing
 
@@ -215,4 +284,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [GitHub Repository](https://github.com/nuvtools/nuvtools-aspnetcore)
 - [NuGet Package - NuvTools.AspNetCore](https://www.nuget.org/packages/NuvTools.AspNetCore/)
 - [NuGet Package - NuvTools.AspNetCore.EntityFrameworkCore](https://www.nuget.org/packages/NuvTools.AspNetCore.EntityFrameworkCore/)
+- [NuGet Package - NuvTools.AspNetCore.Blazor](https://www.nuget.org/packages/NuvTools.AspNetCore.Blazor/)
+- [NuGet Package - NuvTools.AspNetCore.Blazor.MudBlazor](https://www.nuget.org/packages/NuvTools.AspNetCore.Blazor.MudBlazor/)
 - [Official Website](https://nuvtools.com)

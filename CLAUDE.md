@@ -6,11 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 NuvTools.AspNetCore is a suite of helper libraries for ASP.NET Core applications targeting .NET 8, .NET 9, and .NET 10. The solution contains:
 
-- **NuvTools.AspNetCore**: General-purpose library with common helpers for ASP.NET Core applications
-- **NuvTools.AspNetCore.EntityFrameworkCore**: Entity Framework Core helpers and extensions
+- **NuvTools.AspNetCore**: General-purpose library with composite localization
+- **NuvTools.AspNetCore.EntityFrameworkCore**: Entity Framework Core helpers with database migration extensions
+- **NuvTools.AspNetCore.Blazor**: Blazor JavaScript interop services (clipboard, local/session storage)
+- **NuvTools.AspNetCore.Blazor.MudBlazor**: MudBlazor components, converters, and utilities
 - **NuvTools.AspNetCore.Tests**: Test project using NUnit
 
-Both libraries are published as NuGet packages with strong-name signing enabled.
+All libraries are published as NuGet packages.
 
 ## Build and Test Commands
 
@@ -37,7 +39,7 @@ dotnet test tests/NuvTools.AspNetCore.Tests/NuvTools.AspNetCore.Tests.csproj
 ```
 
 ### Build NuGet packages
-Both projects have `GeneratePackageOnBuild` set to `true`, so packages are automatically generated during Release builds:
+All projects have `GeneratePackageOnBuild` set to `true`, so packages are automatically generated during Release builds:
 ```bash
 dotnet build NuvTools.AspNetCore.slnx --configuration Release
 ```
@@ -62,36 +64,44 @@ This library provides foundational helpers organized into namespaces:
 
 Key pattern: The CompositeLocalizer allows you to combine multiple IStringLocalizer instances and resolve localization keys with prefix-based routing or fallback logic.
 
-#### Mapper (`NuvTools.AspNetCore.Mapper`)
-- **ServiceWithMapperBase<TDTO, TEntity>**: Abstract base class providing AutoMapper integration for service classes. Includes helper methods for converting between DTOs and entities in various collection types (IEnumerable, IList, arrays).
+### NuvTools.AspNetCore.Blazor Library
 
-#### JSInterop (`NuvTools.AspNetCore.JSInterop`)
-- **ClipboardService**: Provides JavaScript interop for clipboard operations (`ReadTextAsync`, `WriteTextAsync`).
+Provides JavaScript interop services for Blazor applications:
+
+- **IClipboardService / ClipboardService**: Clipboard read/write operations
+- **ILocalStorageService / LocalStorageService**: Browser localStorage access with JSON serialization
+- **ISessionStorageService / SessionStorageService**: Browser sessionStorage access with JSON serialization
+
+Register services using `AddBlazorServices()` extension method.
+
+### NuvTools.AspNetCore.Blazor.MudBlazor Library
+
+MudBlazor-specific components and utilities:
+
+#### Services
+- **ILoadingService / LoadingService**: Counter-based loading indicator with nested call support. Use `RunAsync()` for exception-safe loading.
+
+#### Components
+- **MudTablePageBase<TItem, TFilter, TOrdering>**: Abstract base class for server-side paged MudTable with session storage filter persistence. Override `OnFetchDataFailed()` to customize error handling.
+
+#### Converters (`NuvTools.AspNetCore.Blazor.MudBlazor.Converters`)
+- **PatternStringConverter**: Pattern-based input masking for MudTextField. Pattern chars: `A`=alphanumeric, `N`=numeric, `L`=letter.
+- **UpperCaseConverter**: Converts input to uppercase.
+- **VinConverter**: Vehicle Identification Number formatting.
+
+#### Country-Specific Converters
+- **Brazil** (`Brazil.Converters.BrazilianDocumentConverters`): MobilePhone, LandlinePhone, Cpf, Cnpj, Cep
+- **United States** (`UnitedStates.Converters.USDocumentConverters`): Phone, MobilePhone, LandlinePhone, Ssn, ZipCode, ZipCodePlus4
+- **Mercosul** (`Mercosul.Converters.MercosulDocumentConverters`): License plate formats
+
+#### Validators
+- **MudFormValidatorBase**: Base class for MudBlazor form validation integration.
 
 ### NuvTools.AspNetCore.EntityFrameworkCore Library
 
-This library extends the base library with Entity Framework Core functionality:
+Provides Entity Framework Core helpers:
 
-#### Mapper (`NuvTools.AspNetCore.EntityFrameworkCore.Mapper`)
-- **ServiceWithCrudBase<TContext, TDTO, TEntity, TKey>**: Abstract base class inheriting from `ServiceWithMapperBase` that adds CRUD operations with AutoMapper integration. Provides:
-  - `FindAsync()`: Retrieve entities by ID or composite keys
-  - `FindFromExpressionAsync()`: Query using LINQ expressions
-  - `AddAndSaveAsync()`: Create new entities
-  - `UpdateAndSaveAsync()`: Update existing entities
-  - `RemoveAndSaveAsync()`: Delete entities
-
-  Uses `NuvTools.Data.EntityFrameworkCore.Extensions` for database operations and `NuvTools.Common.ResultWrapper.IResult` for operation results.
-
-#### Extensions (`NuvTools.AspNetCore.EntityFrameworkCore.Extensions`)
 - **ApplicationBuilderExtensions**: Contains `DatabaseMigrate<TContext>()` extension method for running EF Core migrations during application startup with optional timeout configuration.
-
-### Base Class Hierarchy
-
-When creating services:
-1. Use `ServiceWithMapperBase<TDTO, TEntity>` for services that need AutoMapper but no database access
-2. Use `ServiceWithCrudBase<TContext, TDTO, TEntity, TKey>` for services with full CRUD operations
-
-Both classes use primary constructors with dependency injection.
 
 ## Code Style and Conventions
 
@@ -104,23 +114,26 @@ Both classes use primary constructors with dependency injection.
 ## Dependencies
 
 ### NuvTools.AspNetCore
-- AutoMapper 16.0.0
-- Microsoft.Extensions.Localization.Abstractions 10.0.0
-- Microsoft.Extensions.Logging.Abstractions 10.0.0
-- Microsoft.JSInterop (version varies by target framework)
+- Microsoft.Extensions.Localization.Abstractions
+- Microsoft.Extensions.Logging.Abstractions
 
 ### NuvTools.AspNetCore.EntityFrameworkCore
-- NuvTools.Data.EntityFrameworkCore 9.5.0
-- Microsoft.EntityFrameworkCore.Relational 9.0.10
+- NuvTools.Data.EntityFrameworkCore
+- Microsoft.EntityFrameworkCore.Relational
 - Microsoft.AspNetCore.App (framework reference)
-- NuvTools.AspNetCore (project reference)
 
-## Strong-Name Signing
+### NuvTools.AspNetCore.Blazor
+- Microsoft.JSInterop (version varies by target framework)
 
-Both libraries use strong-name signing:
-- NuvTools.AspNetCore uses `NuvTools.AspNetCore.snk`
-- NuvTools.AspNetCore.EntityFrameworkCore uses `NuvTools.AspNetCore.EntityFrameworkCore.snk`
+### NuvTools.AspNetCore.Blazor.MudBlazor
+- MudBlazor
+- NuvTools.AspNetCore.Blazor (project reference)
 
 ## Testing
 
 Tests use NUnit framework (version 4.4.0) with NUnit3TestAdapter. The test project targets only `net10.0`.
+
+### Run a single test
+```bash
+dotnet test --filter "FullyQualifiedName~TestClassName.TestMethodName"
+```

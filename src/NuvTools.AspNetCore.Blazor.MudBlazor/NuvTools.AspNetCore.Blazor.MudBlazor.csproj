@@ -6,7 +6,7 @@
 		<Authors>Nuv Tools</Authors>
 		<Copyright>Copyright © 2026 Nuv Tools</Copyright>
 		<PackageProjectUrl>https://nuvtools.com</PackageProjectUrl>
-		<Description>Entity Framework Core service base classes with CRUD operations and database migration helpers for ASP.NET Core.</Description>
+		<Description>MudBlazor helpers including converters, validators, loading service, and server-paged table base component.</Description>
 		<Version>10.1.0</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
@@ -17,18 +17,10 @@
 		<RepositoryType>git</RepositoryType>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageTags>NuvTools AspNetCore EntityFrameworkCore CRUD Migrations</PackageTags>
+		<PackageTags>NuvTools Blazor MudBlazor Converters ServerPaging Loading</PackageTags>
 		<ImplicitUsings>true</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-		
-		<PackageReference Include="NuvTools.Data.EntityFrameworkCore" Version="[10.0.2,10.1.0)" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[9.0.12,9.1.0)" Condition="'$(TargetFramework)' == 'net8' OR '$(TargetFramework)' == 'net9'" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[10.0.2,10.1.0)" Condition="'$(TargetFramework)' == 'net10.0'" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="..\..\icon.png">
@@ -48,7 +40,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\NuvTools.AspNetCore\NuvTools.AspNetCore.csproj" />
+		<PackageReference Include="FluentValidation" Version="[12.1.1,13.0.0)" />
+		<PackageReference Include="MudBlazor" Version="[8.15.0,9.0.0)" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.2,10.1.0)" />
+		<PackageReference Include="NuvTools.Common" Version="[10.0.2,10.1.0)" />
+		<PackageReference Include="NuvTools.Data" Version="[10.1.0,10.2.0)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\NuvTools.AspNetCore.Blazor\NuvTools.AspNetCore.Blazor.csproj" />
 	</ItemGroup>
 
 </Project>
