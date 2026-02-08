@@ -4,7 +4,8 @@
       "Bash(tree:*)",
       "Bash(dotnet build:*)",
       "Bash(dotnet test:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

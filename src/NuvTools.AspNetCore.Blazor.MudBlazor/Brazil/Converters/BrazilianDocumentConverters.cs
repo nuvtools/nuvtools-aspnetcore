@@ -76,6 +76,23 @@ public static class BrazilianDocumentConverters
     public static string? FormatCep(string? value) => Cep.Format(value);
 
     /// <summary>
+    /// Formats a CPF or CNPJ for display, automatically detecting the type by length (11 digits for CPF, 14 for CNPJ).
+    /// </summary>
+    /// <param name="value">The raw CPF or CNPJ value.</param>
+    /// <returns>The formatted CPF or CNPJ, or <c>null</c> if the value is empty or has an unrecognized length.</returns>
+    public static string? FormatCpfOrCnpj(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return null;
+
+        var digitsOnly = new string(value.Where(char.IsDigit).ToArray());
+
+        return digitsOnly.Length > 11
+            ? Cpf.Format(digitsOnly)
+            : Cnpj.Format(digitsOnly);
+    }
+
+    /// <summary>
     /// Formats a phone number for display, automatically detecting if it's a mobile (11 digits) or landline (10 digits).
     /// </summary>
     /// <param name="value">The raw phone number.</param>
