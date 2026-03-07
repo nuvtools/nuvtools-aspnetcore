@@ -31,6 +31,7 @@ Blazor services for browser APIs and common functionality.
 - **Local Storage Service**: Browser localStorage with JSON serialization
 - **Session Storage Service**: Browser sessionStorage with JSON serialization
 - **Loading Service**: Counter-based loading indicator with nested call support and `RunAsync` helper
+- **Download File Service**: Trigger browser file downloads from byte arrays, streams, or text with chunked transfer for large files
 
 ### NuvTools.AspNetCore.Blazor.MudBlazor
 
@@ -159,6 +160,42 @@ services.AddLoadingService();
     }
 
     public void Dispose() => LoadingService.OnChange -= StateHasChanged;
+}
+```
+
+### Download File Service (Blazor)
+
+Trigger browser file downloads from byte arrays, streams, or text:
+
+```csharp
+// Register in Program.cs (or use services.AddBlazorServices() to register all)
+services.AddDownloadFileService();
+
+// In your component
+@inject IDownloadFileService DownloadFileService
+
+@code {
+    // Download from a byte array
+    private async Task DownloadPdf()
+    {
+        byte[] pdfBytes = await GenerateReport();
+        await DownloadFileService.DownloadFileAsync("report.pdf", pdfBytes, "application/pdf");
+    }
+
+    // Download from a stream (automatically chunked for large files)
+    private async Task DownloadLargeFile()
+    {
+        using var stream = File.OpenRead("largefile.zip");
+        await DownloadFileService.DownloadFileAsync("largefile.zip", stream, "application/zip");
+    }
+
+    // Download from text
+    private async Task DownloadCsv()
+    {
+        var csv = "Name,Age\nAlice,30\nBob,25";
+        await DownloadFileService.DownloadFileFromTextAsync(
+            "data.csv", csv, Encoding.UTF8, "text/csv");
+    }
 }
 ```
 

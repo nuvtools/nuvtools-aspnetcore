@@ -53,9 +53,19 @@ public static class BlazorServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Adds the <see cref="IDownloadFileService"/> to the service collection as a scoped service.
+    /// </summary>
+    /// <param name="services">The service collection to add the service to.</param>
+    /// <returns>The service collection for chaining.</returns>
+    public static IServiceCollection AddDownloadFileService(this IServiceCollection services)
+    {
+        return services.AddScoped<IDownloadFileService, DownloadFileService>();
+    }
+
+    /// <summary>
     /// Adds all Blazor services to the service collection as scoped services.
     /// This includes <see cref="IClipboardService"/>, <see cref="ILocalStorageService"/>,
-    /// <see cref="ISessionStorageService"/>, and <see cref="ILoadingService"/>.
+    /// <see cref="ISessionStorageService"/>, <see cref="ILoadingService"/>, and <see cref="IDownloadFileService"/>.
     /// </summary>
     /// <param name="services">The service collection to add the services to.</param>
     /// <returns>The service collection for chaining.</returns>
@@ -65,6 +75,7 @@ public static class BlazorServiceCollectionExtensions
             .AddClipboardService()
             .AddLocalStorageService()
             .AddSessionStorageService()
-            .AddLoadingService();
+            .AddLoadingService()
+            .AddDownloadFileService();
     }
 }

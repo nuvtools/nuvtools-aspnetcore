@@ -7,7 +7,7 @@
 		<Copyright>Copyright © 2026 Nuv Tools</Copyright>
 		<PackageProjectUrl>https://nuvtools.com</PackageProjectUrl>
 		<Description>MudBlazor helpers including converters, validators, and server-paged table base component.</Description>
-		<Version>10.1.1</Version>
+		<Version>10.1.2</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<PackageIcon>icon.png</PackageIcon>
@@ -42,8 +42,8 @@
 	<ItemGroup>
 		<PackageReference Include="FluentValidation" Version="[12.1.1,13.0.0)" />
 		<PackageReference Include="MudBlazor" Version="[8.15.0,9.0.0)" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.2,10.1.0)" />
-		<PackageReference Include="NuvTools.Common" Version="[10.0.2,10.1.0)" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
+		<PackageReference Include="NuvTools.Common" Version="10.0.3" />
 		<PackageReference Include="NuvTools.Data" Version="[10.1.0,10.2.0)" />
 	</ItemGroup>
 
