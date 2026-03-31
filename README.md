@@ -40,7 +40,7 @@ MudBlazor components and utilities for Blazor applications.
 **Key Features:**
 - **Pattern Converters**: Flexible input masking for MudTextField (phone, documents, etc.)
 - **Country-Specific Converters**: Pre-configured formatters for Brazil and United States
-- **MudTable Base Class**: Server-side paging with session storage persistence
+- **MudTable Base Class**: Server-side paging with session storage persistence and `SkipCount` mode support for large datasets
 
 ## Installation
 
@@ -250,6 +250,61 @@ var formatted = USDocumentConverters.FormatPhone("5551234567");
 // Auto-detect mobile vs landline
 var formatted = BrazilianDocumentConverters.FormatPhone("11999999999");
 ```
+
+### Server-Side Paging with MudTable
+
+`MudTablePageBase` provides a base class for server-side paging with MudTable. It handles filter persistence, sort mapping, and loading indicators:
+
+```csharp
+public class UserListPage : MudTablePageBase<UserDto, UserFilter, UserSortColumn>
+{
+    [Inject] private IUserService UserService { get; set; } = default!;
+
+    protected override string SessionStorageKey => "user-list-filter";
+
+    protected override UserFilter CreateDefaultFilter() => new()
+    {
+        SortColumn = UserSortColumn.Name,
+        PageSize = 25
+    };
+
+    protected override async Task<IResult<PagingWithEnumerableList<UserDto>>> FetchDataAsync(
+        UserFilter filter, CancellationToken cancellationToken)
+    {
+        return await UserService.GetUsersAsync(filter, cancellationToken);
+    }
+
+    protected override UserSortColumn MapSortLabelToOrdering(string sortLabel)
+        => Enum.Parse<UserSortColumn>(sortLabel);
+}
+```
+
+**SkipCount mode for large datasets**: Set `CountMode = PagingCountMode.SkipCount` in your filter to skip the expensive `COUNT(*)` query. The base class automatically synthesizes `TotalItems` for MudTablePager so Next/Previous navigation works correctly:
+
+```csharp
+protected override UserFilter CreateDefaultFilter() => new()
+{
+    SortColumn = UserSortColumn.Name,
+    PageSize = 25,
+    CountMode = PagingCountMode.SkipCount // No COUNT(*) query
+};
+```
+
+When using `SkipCount`, customize `MudTablePager` to hide the unknown total:
+
+```razor
+<MudTable ServerData="@(new Func<TableState, CancellationToken, Task<TableData<UserDto>>>(ServerReload))"
+          @ref="Table" CurrentPage="CurrentPage">
+    @* columns *@
+    <PagerContent>
+        <MudTablePager PageSizeOptions="@(new int[] { 25, 50, 100 })"
+                       InfoFormat=@("{first_item}-{last_item}")
+                       HidePageNumber="true" />
+    </PagerContent>
+</MudTable>
+```
+
+The base class also exposes `HasNextPage` and `IsFirstPage` properties, along with `NextPageAsync()` / `PreviousPageAsync()` methods for building custom navigation UI.
 
 ### Clipboard Service (Blazor)
 

@@ -4,6 +4,7 @@ using NuvTools.AspNetCore.Blazor.JSInterop;
 using NuvTools.AspNetCore.Blazor.Services;
 using NuvTools.Common.ResultWrapper;
 using NuvTools.Data.Paging;
+using NuvTools.Data.Paging.Enumerations;
 
 namespace NuvTools.AspNetCore.Blazor.MudBlazor.Components;
 
@@ -20,6 +21,7 @@ namespace NuvTools.AspNetCore.Blazor.MudBlazor.Components;
 /// <item><description>Integration with <see cref="ILoadingService"/> for loading indicators</description></item>
 /// <item><description>MudTable server-side data binding</description></item>
 /// <item><description>Sort direction mapping between NuvTools and MudBlazor</description></item>
+/// <item><description>Support for <see cref="PagingCountMode.SkipCount"/> to avoid expensive COUNT queries on large datasets</description></item>
 /// </list>
 /// </remarks>
 /// <example>
@@ -85,6 +87,17 @@ public abstract class MudTablePageBase<TItem, TFilter, TOrdering> : ComponentBas
     /// Gets or sets the reference to the MudTable component.
     /// </summary>
     public MudTable<TItem> Table { get; set; } = default!;
+
+    /// <summary>
+    /// Gets whether the current paged data has more items beyond the current page.
+    /// Useful for infinite scroll or forward-only navigation scenarios with <see cref="PagingCountMode.SkipCount"/>.
+    /// </summary>
+    public bool HasNextPage => PagedData?.HasNextPage ?? false;
+
+    /// <summary>
+    /// Gets whether the current page is the first page (page index is 0).
+    /// </summary>
+    public bool IsFirstPage => CurrentPage <= 0;
 
     private bool _firstTime = true;
 
@@ -196,6 +209,23 @@ public abstract class MudTablePageBase<TItem, TFilter, TOrdering> : ComponentBas
         => await SessionStorage.SetItemAsync(SessionStorageKey, ModelFilter).ConfigureAwait(false);
 
     /// <summary>
+    /// Calculates the TotalItems value for MudTable when using <see cref="PagingCountMode.SkipCount"/>.
+    /// Since MudTablePager requires a total to calculate navigation, this synthesizes a value:
+    /// if there is a next page, it reports enough items to enable the Next button;
+    /// otherwise, it reports the exact count of items seen up to this page.
+    /// </summary>
+    private int CalculateTotalItemsForSkipCount(PagingWithEnumerableList<TItem> data)
+    {
+        var itemsOnPage = data.List.Count();
+        var itemsUpToCurrentPage = data.PageIndex * ModelFilter.PageSize + itemsOnPage;
+
+        if (data.HasNextPage)
+            return itemsUpToCurrentPage + 1;
+
+        return itemsUpToCurrentPage;
+    }
+
+    /// <summary>
     /// Server reload method for MudTable binding.
     /// </summary>
     /// <param name="state">The table state from MudBlazor.</param>
@@ -235,12 +265,42 @@ public abstract class MudTablePageBase<TItem, TFilter, TOrdering> : ComponentBas
 
             await OnDataLoadedAsync(PagedData).ConfigureAwait(false);
 
-            return new TableData<TItem> { TotalItems = PagedData.Total, Items = PagedData.List };
+            var totalItems = ModelFilter.CountMode == PagingCountMode.SkipCount
+                ? CalculateTotalItemsForSkipCount(PagedData)
+                : PagedData.Total;
+
+            return new TableData<TItem> { TotalItems = totalItems, Items = PagedData.List };
         }
         finally
         {
             LoadingService?.Hide();
             StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Navigates to the next page. Useful for custom navigation with <see cref="PagingCountMode.SkipCount"/>.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    protected async Task NextPageAsync()
+    {
+        if (HasNextPage)
+        {
+            ModelFilter.PageIndex++;
+            await ReloadTableAsync().ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Navigates to the previous page. Useful for custom navigation with <see cref="PagingCountMode.SkipCount"/>.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    protected async Task PreviousPageAsync()
+    {
+        if (!IsFirstPage)
+        {
+            ModelFilter.PageIndex--;
+            await ReloadTableAsync().ConfigureAwait(false);
         }
     }
 
