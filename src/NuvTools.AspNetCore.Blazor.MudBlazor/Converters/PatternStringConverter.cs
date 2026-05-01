@@ -23,7 +23,7 @@ namespace NuvTools.AspNetCore.Blazor.MudBlazor.Converters;
 /// var plateConverter = new PatternStringConverter("LLL-NANN");
 /// </code>
 /// </example>
-public class PatternStringConverter : Converter<string?>
+public class PatternStringConverter : DeferredConverter<string?, string?>
 {
     private static readonly HashSet<char> PatternChars = ['A', 'N', 'L'];
     private readonly string _pattern;
@@ -42,8 +42,7 @@ public class PatternStringConverter : Converter<string?>
         _pattern = pattern;
         _toUpperCase = toUpperCase;
         _maxLength = pattern.Count(c => PatternChars.Contains(c));
-        SetFunc = FormatForDisplay;
-        GetFunc = NormalizeForStorage;
+        Set(FormatForDisplay, NormalizeForStorage);
     }
 
     private string? FormatForDisplay(string? value)
@@ -131,5 +130,5 @@ public class PatternStringConverter : Converter<string?>
     /// </summary>
     /// <param name="value">The raw value to format.</param>
     /// <returns>The formatted value, or null if the input is empty.</returns>
-    public new string? Format(string? value) => FormatForDisplay(value);
+    public string? Format(string? value) => FormatForDisplay(value);
 }

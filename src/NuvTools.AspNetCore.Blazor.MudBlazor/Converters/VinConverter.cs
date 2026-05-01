@@ -11,7 +11,7 @@ namespace NuvTools.AspNetCore.Blazor.MudBlazor.Converters;
 /// This converter automatically removes these invalid characters and converts the input to uppercase.
 /// </para>
 /// </remarks>
-public sealed class VinConverter : Converter<string?>
+public sealed class VinConverter : DeferredConverter<string?, string?>
 {
     /// <summary>
     /// Characters that are not allowed in VINs.
@@ -23,8 +23,7 @@ public sealed class VinConverter : Converter<string?>
     /// </summary>
     public VinConverter()
     {
-        SetFunc = FormatVin;
-        GetFunc = FormatVin;
+        Set(FormatVin, FormatVin);
     }
 
     /// <summary>
