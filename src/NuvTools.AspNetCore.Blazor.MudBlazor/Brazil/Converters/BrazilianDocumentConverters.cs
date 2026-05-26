@@ -29,10 +29,12 @@ public static class BrazilianDocumentConverters
     public static PatternStringConverter Cpf => new("NNN.NNN.NNN-NN");
 
     /// <summary>
-    /// Converter for CNPJ (corporate taxpayer ID) in format NN.NNN.NNN/NNNN-NN.
+    /// Converter for CNPJ (corporate taxpayer ID) in format AA.AAA.AAA/AAAA-NN.
+    /// Supports the new RFB alphanumeric format (uppercase A–Z and 0–9 in positions 1–12)
+    /// while remaining compatible with legacy numeric CNPJs.
     /// </summary>
-    /// <example>12.345.678/0001-90</example>
-    public static PatternStringConverter Cnpj => new("NN.NNN.NNN/NNNN-NN");
+    /// <example>12.345.678/0001-90 or 12.ABC.345/01DE-35</example>
+    public static PatternStringConverter Cnpj => new("AA.AAA.AAA/AAAA-NN");
 
     /// <summary>
     /// Converter for CEP (postal code) in format NNNNN-NNN.
@@ -85,11 +87,11 @@ public static class BrazilianDocumentConverters
         if (string.IsNullOrEmpty(value))
             return null;
 
-        var digitsOnly = new string(value.Where(char.IsDigit).ToArray());
+        var alphanumericOnly = new string(value.Where(char.IsLetterOrDigit).ToArray());
 
-        return digitsOnly.Length > 11
-            ? Cpf.Format(digitsOnly)
-            : Cnpj.Format(digitsOnly);
+        return alphanumericOnly.Length > 11
+            ? Cnpj.Format(alphanumericOnly)
+            : Cpf.Format(alphanumericOnly);
     }
 
     /// <summary>
