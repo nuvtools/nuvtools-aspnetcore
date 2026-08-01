@@ -32,6 +32,8 @@ Blazor services for browser APIs and common functionality.
 - **Session Storage Service**: Browser sessionStorage with JSON serialization
 - **Loading Service**: Counter-based loading indicator with nested call support and `RunAsync` helper
 - **Download File Service**: Trigger browser file downloads from byte arrays, streams, or text with chunked transfer for large files
+- **Confirm Exit Service**: Ask the browser to confirm before closing or reloading the tab when there are unsaved changes
+- **Camera Component**: Live camera preview and frame capture, with configurable resolution, camera, mirroring and image format
 
 ### NuvTools.AspNetCore.Blazor.MudBlazor
 
@@ -198,6 +200,84 @@ services.AddDownloadFileService();
     }
 }
 ```
+
+### Confirm Exit Service (Blazor)
+
+Ask the browser to confirm before the user closes or reloads the tab. Enable it only while there are
+unsaved changes — both methods are idempotent, so they can be called on every render without extra
+interop calls:
+
+```csharp
+// Register in Program.cs (or use services.AddBlazorServices() to register all)
+services.AddConfirmExitService();
+
+// In your component
+@inject IConfirmExitService ConfirmExit
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (HasUnsavedChanges())
+            await ConfirmExit.EnableAsync();
+        else
+            await ConfirmExit.DisableAsync();
+    }
+
+    // The service is scoped, so turn the confirmation off when leaving the page.
+    public async ValueTask DisposeAsync() => await ConfirmExit.DisableAsync();
+}
+```
+
+The warning text comes from the browser and cannot be customized. It covers closing/reloading the tab
+and leaving the application, but not in-app (SPA) navigation.
+
+### Camera Component (Blazor)
+
+Live camera preview and frame capture. The component owns its own `<video>`, capture `<canvas>` and
+media stream — several instances can run side by side — and renders no layout of its own, so the page
+keeps full control of the look:
+
+```razor
+@using NuvTools.AspNetCore.Blazor.Components
+
+<div class="camera-frame">
+    <NuvCamera @ref="_camera"
+               FacingMode="CameraFacingMode.Environment"
+               Mirrored="false"
+               Width="1280" Height="720"
+               Format="CameraImageFormat.Jpeg" Quality="0.9"
+               Style="width:100%;height:100%;object-fit:cover"
+               OnError="HandleCameraError">
+        <Overlay>
+            <div class="scan-guide"></div>
+        </Overlay>
+    </NuvCamera>
+</div>
+
+<button @onclick="ScanAsync">Scan</button>
+
+@code {
+    private NuvCamera _camera = default!;
+
+    private async Task ScanAsync()
+    {
+        var capture = await _camera.CaptureAsync();
+        if (capture is null) return;
+
+        // Base64 already comes without the "data:image/jpeg;base64," prefix.
+        await Reader.ReadAsync(capture.Base64);   // or capture.Bytes / capture.DataUrl
+    }
+
+    // NotAllowedError (denied), NotFoundError (no camera), NotReadableError (camera in use).
+    private void HandleCameraError(CameraError error) => Message = Localizer[error.Name];
+}
+```
+
+The camera starts on first render (`AutoStart`) and is released on dispose — every track is stopped, so
+the camera light goes off. Use `StartAsync`/`StopAsync` to drive it manually, `GetDevicesAsync` to list
+the available cameras and `SwitchDeviceAsync` to change camera. `Mirrored` applies to both the preview
+and the captured frame, so what the user sees is what gets saved; capture defaults to the stream's
+native resolution unless `CaptureWidth`/`CaptureHeight` are set.
 
 ### Pattern Converters (MudBlazor)
 

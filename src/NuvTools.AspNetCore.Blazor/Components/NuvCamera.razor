@@ -1,0 +1,7 @@
+@namespace NuvTools.AspNetCore.Blazor.Components
+
+@* Headless by design: no wrapper element and no styling of its own, so the host page keeps full
+   control of the layout. The canvas is only the capture buffer and is never shown. *@
+<video @ref="_video" class="@Class" style="@Style" @attributes="AdditionalAttributes"></video>
+<canvas @ref="_canvas" style="display:none"></canvas>
+@Overlay
