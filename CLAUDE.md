@@ -135,3 +135,13 @@ Tests use NUnit framework (version 4.4.0) with NUnit3TestAdapter. The test proje
 ```bash
 dotnet test --filter "FullyQualifiedName~TestClassName.TestMethodName"
 ```
+
+## CI and Releasing
+
+`.github/workflows/ci.yml` builds the solution in Release with `-warnaserror` and runs the tests on every push and pull request to `main`.
+
+Each package has its own manually-run publish workflow (`aspnetcore-publish.yml`, `blazor-publish.yml`, `mudblazor-publish.yml` and `entityframeworkcore-publish.yml`), calling the reusable `package-publish.yml`. It reads `<Version>` from the `.csproj` (never computes it), verifies the package, pushes through nuget.org trusted publishing behind the `nuget` environment, and then writes the release tag (`aspnetcore-vX.Y.Z`, `blazor-vX.Y.Z`, `mudblazor-vX.Y.Z` and `entityframeworkcore-vX.Y.Z`). See *Releasing* in the README.
+
+- A new package needs its own small workflow file and a row in the README table.
+- The SourceLink and symbol settings (`PublishRepositoryUrl`, `EmbedUntrackedSources`, `IncludeSymbols`, `snupkg`) must be in every packable project: the workflow fails a package without its `.snupkg`.
+- A package referenced as a project by another of this repository is published first; see *Releasing* in the README for the order.
